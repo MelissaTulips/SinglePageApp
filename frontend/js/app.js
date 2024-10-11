@@ -1,5 +1,54 @@
+//log in stufff
+
+
+
 window.onload = function() {
     let userToken = '';
+
+
+
+
+
+
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        let formData = new FormData(event.target);
+        const username = formData.get('username');
+        const password = formData.get('password');
+
+
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                userToken = data.token; 
+                fetchAllPosts(userToken); 
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+
+
+
+    
+    //existing code --------------
 
     const getForm = document.getElementById('get-user-form');
     getForm.addEventListener('submit', async function(event) {
@@ -26,10 +75,19 @@ window.onload = function() {
                 await fetchAllPosts(userToken); 
             }
 
+
+
         } catch (error) {
            console.log(error);
         }
     });
+
+
+
+
+
+
+
 
     const postForm = document.getElementById('create-post-form');
     postForm.addEventListener('submit', async function(event) {
@@ -76,6 +134,13 @@ window.onload = function() {
         }
     });
 
+
+
+
+
+
+
+
     async function fetchAllPosts(token) {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/posts', {
@@ -111,4 +176,13 @@ window.onload = function() {
         fetchAllPosts(token);
     }
 };
+
+
+
+
+
+
+
+
+
 
