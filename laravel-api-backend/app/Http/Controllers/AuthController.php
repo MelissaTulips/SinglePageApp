@@ -51,6 +51,9 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token->plainTextToken
         ];
+
+
+        
     }
 
     public function logout(Request $request) {

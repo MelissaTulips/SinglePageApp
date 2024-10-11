@@ -11,20 +11,19 @@
 
     <div class="container">
         <h2>Get user</h2>
-        <form action="/api/user" method="get" id="get-user-form">
+        <form action="/api/user" method="get" class="get-user-form" id="get-user-form">
             <label for="token">Token</label>
             <input type="text" name="token" id="token">
 
             <input type="submit" value="Get">
         </form>
+        <div id="user-data"></div>
     </div>
 
     <div class="container">
         <h2>Create post</h2>
+   
         <form action="/api/posts" method="post" id="create-post-form">
-            <label for="token">Token</label>
-            <input type="text" name="token" id="token">
-
             <label for="title">Title</label>
             <input type="text" name="title" id="title">
 
@@ -35,10 +34,24 @@
         </form>
         <div id="post-data"></div>
     </div>
+
     <div class="container">
         <h2>Posts</h2>
-        <div id="user-posts"></div>
+        <div id="user-posts"></div> 
     </div>
-    <script src="js/app.js"></script>
+
+    <script src="js/app.js"></script> 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

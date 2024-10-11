@@ -1,4 +1,6 @@
 window.onload = function() {
+    let userToken = '';
+
     const getForm = document.getElementById('get-user-form');
     getForm.addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -7,7 +9,7 @@ window.onload = function() {
         let token = formData.get('token');
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/user', {
+            const response = await fetch('http://127.0.0.1:8000/api/user', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -20,7 +22,8 @@ window.onload = function() {
             if (response.ok) {
                 document.getElementById('user-data').innerHTML = `<p>User Email: ${data.email}<br>
                                                                     User Name: ${data.name}</p>`;
-                await fetchAllPosts(token);
+                userToken = token; 
+                await fetchAllPosts(userToken); 
             }
 
         } catch (error) {
@@ -32,31 +35,40 @@ window.onload = function() {
     postForm.addEventListener('submit', async function(event) {
         event.preventDefault();
 
+
         let formData = new FormData(event.target);
         let token = formData.get('token');
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/posts', {
+            const response = await fetch('http://127.0.0.1:8000/api/posts', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     title: formData.get('title'),
-                    body: formData.get('title')
+                    body: formData.get('body')
                 })
             });
+
+            
 
             const data = await response.json();
 
             if (response.ok) {
-                document.getElementById('post-data').innerHTML = `<p>Post Created Successfully!</p>
-                                                                  <p><strong>Title:</strong> ${data.title}, <strong>Body:</strong> ${data.body}</p>`;
-                await fetchAllPosts(token);
+                document.getElementById('user-data').innerHTML = `<p>User Email: ${data.email}<br>
+                                                                    User Name: ${data.name}</p>`;
+                userToken = token;
+                await fetchAllPosts(userToken);
+                
 
-                document.getElementById('title').value = '';
-                document.getElementById('body').value = '';
+                
+                document.getElementById('title').value = ''; 
+                document.getElementById('body').value = ''; 
+
+
+
             }
 
         } catch (error) {
@@ -66,10 +78,10 @@ window.onload = function() {
 
     async function fetchAllPosts(token) {
         try {
-            const response = await fetch('http://127.0.0.1:8000/posts', {
-                method: 'POST',
+            const response = await fetch('http://127.0.0.1:8000/api/posts', {
+                method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -99,7 +111,4 @@ window.onload = function() {
         fetchAllPosts(token);
     }
 };
-
-
-
 
