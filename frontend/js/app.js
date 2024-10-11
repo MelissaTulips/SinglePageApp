@@ -1,4 +1,4 @@
-//log in stufff
+
 
 
 
@@ -9,7 +9,7 @@ window.onload = function() {
 
 
 
-
+//log in stufff
     const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', async function(event) {
         event.preventDefault();

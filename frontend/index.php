@@ -11,7 +11,7 @@
 
     <div class="container">
         <h2>Login</h2>
-        <form id="login-form">
+        <form action="/api/user" method="get" id="login-form">
             <label for="username">Username</label>
             <input type="text" name="username" id="username" required>
 
@@ -28,7 +28,7 @@
 
     <div class="container">
         <h2>Get user</h2>
-        <form action="/api/user" method="get" class="get-user-form" id="get-user-form">
+        <form action="/api/user" method="get" id="get-user-form">
             <label for="token">Token</label>
             <input type="text" name="token" id="token">
 
