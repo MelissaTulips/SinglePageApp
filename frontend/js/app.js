@@ -202,9 +202,88 @@ logoutBtn.addEventListener('click', async function() {
     });
 
     // Create post logic
+    async function fetchAllPosts(token) {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/posts', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            const posts = await response.json();
+            console.log(posts); // Log the API response to check its structure
+    
+            if (response.ok) {
+                const postsContainer = document.getElementById('user-posts');
+                postsContainer.innerHTML = '';
+                posts.forEach(post => {
+                    postsContainer.innerHTML += `
+                        <div class="post">
+                            <p><strong>Title:</strong> ${post.title}</p>
+                            <p><strong>Body:</strong> ${post.body}</p>
+                            <p><strong>Author:</strong> ${post.user ? post.user.name : 'Unknown'}</p> <!-- Adjust this if needed -->
+                        </div>
+                        <hr class="post-divider">
+                    `;
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    
+
+
+
+    const getForm = document.getElementById('get-user-form');
+    getForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+    
+        let formData = new FormData(event.target);
+        let token = formData.get('token');
+    
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/user', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Fix string interpolation
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            const data = await response.json();
+            console.log(data); // Log the response
+    
+            if (response.ok) {
+                // Check if the properties exist in the data object
+                document.getElementById('user-data').innerHTML = `<p>User Email: ${data.email || 'N/A'}<br>
+                                                                   User Name: ${data.name || 'N/A'}</p>`;
+                userToken = token; 
+                await fetchAllPosts(userToken); 
+            } else {
+                document.getElementById('user-data').innerHTML = '<p>Error fetching user data.</p>';
+            }
+    
+        } catch (error) {
+           console.log(error);
+        }
+    });
+    
+
+
+
+
+
+
+
     const postForm = document.getElementById('create-post-form');
     postForm.addEventListener('submit', async function(event) {
         event.preventDefault();
+
+
+        let formData = new FormData(event.target);
+        let token = formData.get('token');
 
         try {
             const response = await fetch('http://127.0.0.1:8000/api/posts', {
@@ -219,44 +298,33 @@ logoutBtn.addEventListener('click', async function() {
                 })
             });
 
+            
+
             const data = await response.json();
 
             if (response.ok) {
+                document.getElementById('user-data').innerHTML = `<p>User Email: ${data.email}<br>
+                                                                    User Name: ${data.name}</p>`;
+                userToken = token;
                 await fetchAllPosts(userToken);
+                
+
+                
                 document.getElementById('title').value = ''; 
                 document.getElementById('body').value = ''; 
+
+
+
             }
+
         } catch (error) {
             console.log(error);
         }
     });
 
-    async function fetchAllPosts(token) {
-        try {
-            const response = await fetch('http://127.0.0.1:8000/api/posts', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
 
-            const posts = await response.json();
-
-            if (response.ok) {
-                const postsContainer = document.getElementById('user-posts');
-                postsContainer.innerHTML = '';
-                posts.forEach(post => {
-                    postsContainer.innerHTML += `
-                        <div class="post">
-                            <p>Title: ${post.title}</p>
-                            <p>Body: ${post.body}</p>
-                        </div>
-                    `;
-                });
-            }
-        } catch (error) {
-            console.log(error);
-        }
     }
+
+
+    
 };
