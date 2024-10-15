@@ -58,35 +58,37 @@ loginForm.addEventListener('submit', async function(event) {
     const getForm = document.getElementById('get-user-form');
     getForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-
+    
         let formData = new FormData(event.target);
         let token = formData.get('token');
-
+    
         try {
             const response = await fetch('http://127.0.0.1:8000/api/user', {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/html'
+                    'Authorization': `Bearer ${token}`, // Fix string interpolation
+                    'Content-Type': 'application/json'
                 }
             });
-
+    
             const data = await response.json();
-
+            console.log(data); // Log the response
+    
             if (response.ok) {
-                document.getElementById('user-data').innerHTML = `<p>User Email: ${data.email}<br>
-                                                                    User Name: ${data.name}</p>`;
+                // Check if the properties exist in the data object
+                document.getElementById('user-data').innerHTML = `<p>User Email: ${data.email || 'N/A'}<br>
+                                                                   User Name: ${data.name || 'N/A'}</p>`;
                 userToken = token; 
                 await fetchAllPosts(userToken); 
+            } else {
+                document.getElementById('user-data').innerHTML = '<p>Error fetching user data.</p>';
             }
-
-
-
+    
         } catch (error) {
            console.log(error);
         }
     });
-
+    
 
 
 
