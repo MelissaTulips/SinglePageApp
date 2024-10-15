@@ -10,18 +10,21 @@
     <h1>Laravel API frontend</h1>
 
     <div class="container">
-        <h2>Login</h2>
-        <form action="/api/user" method="get" id="login-form">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" required>
+    <h2>Login</h2>
+    <form action="/api/user" method="get" id="login-form">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required>
 
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" required>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
 
-            <input type="submit" value="Login">
-        </form>
-        <div id="login-message"></div>
-    </div>
+        <input type="submit" value="Login">
+    </form>
+    <div id="login-message"></div>
+    <div id="token-display"></div> 
+</div>
+
+
 
 
 

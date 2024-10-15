@@ -10,39 +10,44 @@ window.onload = function() {
 
 
 //log in stufff
-    const loginForm = document.getElementById('login-form');
-    loginForm.addEventListener('submit', async function(event) {
-        event.preventDefault();
+const loginForm = document.getElementById('login-form');
+loginForm.addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-        let formData = new FormData(event.target);
-        const username = formData.get('username');
-        const password = formData.get('password');
+    let formData = new FormData(event.target);
+    const email = formData.get('email');
+    const password = formData.get('password');
 
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
 
+        const data = await response.json();
 
-        try {
-            const response = await fetch('http://127.0.0.1:8000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                userToken = data.token; 
-                fetchAllPosts(userToken); 
-            }
-
-        } catch (error) {
-            console.log(error);
+        if (response.ok) {
+            userToken = data.token;
+            fetchAllPosts(userToken);
+            document.getElementById('login-message').innerText = 'Login successful!';
+            document.getElementById('token-display').innerText = `Your token: ${userToken}`; // Display the token
+        } else {
+            document.getElementById('login-message').innerText = data.message || 'Login failed.';
+            document.getElementById('token-display').innerText = ''; // Clear token display on failed login
         }
-    });
+
+    } catch (error) {
+        console.log(error);
+        document.getElementById('login-message').innerText = 'An error occurred.';
+        document.getElementById('token-display').innerText = ''; // Clear token display on error
+    }
+});
 
 
 
